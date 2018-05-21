@@ -89,6 +89,12 @@
       "desc": "Dataset containing transitively resolved redirects between articles in Wikipedia.",
       "defaultgraph": "namespace"
     },
+    "category_redirects": {
+      "name": "Category Redirects",
+      "traits":"LinkedData, Published",
+      "desc": "Dataset containing soft redirects between categories in Wikipedia.",
+      "defaultgraph": "dataset"
+    },
     "article_categories": {
       "name": "Article Categories",
       "traits":"LinkedData, Published",
