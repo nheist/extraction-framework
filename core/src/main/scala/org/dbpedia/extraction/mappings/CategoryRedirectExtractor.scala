@@ -36,16 +36,12 @@ class CategoryRedirectExtractor(
     // if this node is a category
     if (node.title.namespace == Namespace.Category)
     {
-      logger.log(Level.INFO, subjectUri + " is a category. Trying to check for redirects..")
       // get the page text
       val wikiText: String = node.toWikiText
 
-      logger.log(Level.INFO, "WikiText: " + wikiText)
-
-      val regex = new Regex("\\{\\{category redirect\\|([^\\}]*)\\}\\}")
+      val regex = new Regex("\\{\\{[Cc]ategory redirect\\|([^\\}]*)\\}\\}")
       val matchedRegex = regex.findAllIn(wikiText)
 
-      logger.log(Level.INFO, "Applied regex. Results: ", matchedRegex)
       if (matchedRegex.size >= 2)
       {
         var categoryIdentifier = matchedRegex.group(1)
@@ -54,7 +50,6 @@ class CategoryRedirectExtractor(
         {
           categoryIdentifier = categoryPagePrefix + categoryIdentifier
         }
-        logger.log(Level.INFO, "SUCCESS! Regex matched. Creating triple with categoryIdentifier: " + categoryIdentifier)
 
         return Seq(new Quad(language, DBpediaDatasets.CategoryRedirects, subjectUri, wikiPageRedirectsProperty, language.resourceUri.append(categoryIdentifier), node.sourceIri, null))
       }
