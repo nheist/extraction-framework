@@ -56,7 +56,7 @@
 							<id>stats</id>
 							<mainClass>org.dbpedia.extraction.server.stats.CreateMappingStats</mainClass>
 							<args>
-								<arg>/home/nico/src/extraction-framework-data/stats</arg><!-- base dir -->
+								<arg>/home/nheist/src/extraction-framework-data/stats</arg><!-- base dir -->
 								<arg>src/main/statistics</arg><!-- statistics files dir -->
 								<arg>.bz2</arg><!-- file suffix: '.gz', '.bz2' or '' -->
 								<arg>true</arg><!-- pretty printing? ugly in log files. -->
