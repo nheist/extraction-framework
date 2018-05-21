@@ -29,33 +29,26 @@ class CategoryRedirectExtractor(
 
   override val datasets = Set(DBpediaDatasets.CategoryRedirects)
 
-  private val logger = Logger.getLogger(classOf[AbstractExtractor].getName)
-
   override def extract(node : PageNode, subjectUri : String) : Seq[Quad] =
   {
     // if this node is a category
-    if (node.title.namespace == Namespace.Category)
-    {
-      // get the page text
-      val wikiText: String = node.toWikiText
+    if (node.title.namespace != Namespace.Category) return Seq.empty
 
-      val regex = new Regex("\\{\\{[Cc]ategory redirect\\|([^\\}]*)\\}\\}")
-      val matchedRegex = regex.findAllIn(wikiText)
+    // get the page text
+    val wikiText: String = node.toWikiText
 
-      if (matchedRegex.size >= 2)
-      {
-        var categoryIdentifier = matchedRegex.group(1)
-
+    // when matching the template regex, output respective triple
+    val regex = new Regex("\\{\\{[Cc]ategory [Rr]edirect\\|([^\\}]*)\\}\\}")
+    regex.findFirstMatchIn(wikiText) match {
+      case Some(m) =>
+        var categoryIdentifier = m.group(1).trim()
         if (! categoryIdentifier.startsWith(categoryPagePrefix))
         {
           categoryIdentifier = categoryPagePrefix + categoryIdentifier
         }
-
-        return Seq(new Quad(language, DBpediaDatasets.CategoryRedirects, subjectUri, wikiPageRedirectsProperty, language.resourceUri.append(categoryIdentifier), node.sourceIri, null))
-      }
+        Seq(new Quad(language, DBpediaDatasets.CategoryRedirects, subjectUri, wikiPageRedirectsProperty, language.resourceUri.append(categoryIdentifier), node.sourceIri, null))
+      case None => Seq.empty
     }
-
-    Seq.empty
   }
 
 }
