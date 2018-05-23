@@ -1,6 +1,5 @@
 package org.dbpedia.extraction.mappings
 
-import java.util.logging.{Level, Logger}
 import org.dbpedia.extraction.config.provenance.DBpediaDatasets
 import org.dbpedia.extraction.transform.Quad
 import org.dbpedia.extraction.wikiparser._
@@ -29,8 +28,6 @@ class CategoryRedirectExtractor(
 
   override val datasets = Set(DBpediaDatasets.CategoryRedirects)
 
-  private val logger = Logger.getLogger(classOf[AbstractExtractor].getName)
-
   override def extract(node : PageNode, subjectUri : String) : Seq[Quad] =
   {
     // if this node is a category
@@ -48,7 +45,7 @@ class CategoryRedirectExtractor(
         {
           categoryIdentifier = categoryPagePrefix + categoryIdentifier
         }
-        logger.log(Level.INFO, "Matched on identifier " + categoryIdentifier + ". Printing triple (" + categoryIdentifier + ", " + language.resourceUri.append(categoryIdentifier) + ")")
+
         Seq(new Quad(language, DBpediaDatasets.CategoryRedirects, subjectUri, wikiPageRedirectsProperty, language.resourceUri.append(categoryIdentifier), node.sourceIri, null))
       case None => Seq.empty
     }
