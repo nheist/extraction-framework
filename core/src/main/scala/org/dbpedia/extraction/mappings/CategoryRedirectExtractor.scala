@@ -29,6 +29,8 @@ class CategoryRedirectExtractor(
 
   override val datasets = Set(DBpediaDatasets.CategoryRedirects)
 
+  private val logger = Logger.getLogger(classOf[AbstractExtractor].getName)
+
   override def extract(node : PageNode, subjectUri : String) : Seq[Quad] =
   {
     // if this node is a category
@@ -38,7 +40,7 @@ class CategoryRedirectExtractor(
     val wikiText: String = node.toWikiText
 
     // when matching the template regex, output respective triple
-    val regex = new Regex("\\{\\{[Cc]ategory [Rr]edirect\\|([^\\}]*)\\}\\}")
+    val regex = new Regex("\\{\\{(?>[Cc]ategory [Rr]edirect|[Cc]atredirect|[Cc]atred|[Cc]atr)\\|([^\\}]*)\\}\\}")
     regex.findFirstMatchIn(wikiText) match {
       case Some(m) =>
         var categoryIdentifier = m.group(1).trim()
@@ -46,6 +48,7 @@ class CategoryRedirectExtractor(
         {
           categoryIdentifier = categoryPagePrefix + categoryIdentifier
         }
+        logger.log(Level.INFO, "Matched on identifier " + categoryIdentifier + ". Printing triple (" + categoryIdentifier + ", " + language.resourceUri.append(categoryIdentifier) + ")")
         Seq(new Quad(language, DBpediaDatasets.CategoryRedirects, subjectUri, wikiPageRedirectsProperty, language.resourceUri.append(categoryIdentifier), node.sourceIri, null))
       case None => Seq.empty
     }
