@@ -21,8 +21,8 @@ extends PageNodeExtractor
 {
     private val rdfTypeProperty = context.ontology.properties("rdf:type")
 
-    private val parameterlessMaintenanceCategoryTemplates = Set("TODO", "TODO")
-    private val maintenanceCategoryTemplates = Set("TODO")
+    private val parameterlessMaintenanceCategoryTemplates = Set("hidden category", "hiddencat", "tracking category", "trackingcat")
+    private val maintenanceCategoryTemplates = Set("maintenance category", "maincat")
 
     override val datasets = Set(DBpediaDatasets.MaintenanceCategories)
 
@@ -47,7 +47,7 @@ extends PageNodeExtractor
 
     private def hasMaintenanceTemplate(node : Node) : Boolean = node match
     {
-        case maintenanceTemplateNode : TemplateNode if parameterlessMaintenanceCategoryTemplates.contains(maintenanceTemplateNode.title.decoded) || (maintenanceCategoryTemplates.contains(maintenanceTemplateNode.title.decoded) && (maintenanceTemplateNode.property("hidden").isDefined || maintenanceTemplateNode.property("tracking").isDefined)) => true
+        case maintenanceTemplateNode : TemplateNode if parameterlessMaintenanceCategoryTemplates.contains(maintenanceTemplateNode.title.decoded.toLowerCase()) || (maintenanceCategoryTemplates.contains(maintenanceTemplateNode.title.decoded.toLowerCase()) && (maintenanceTemplateNode.property("hidden").isDefined || maintenanceTemplateNode.property("tracking").isDefined)) => true
         case _ => node.children.map(hasMaintenanceTemplate).reduceOption(_ || _).getOrElse(false)
     }
 
