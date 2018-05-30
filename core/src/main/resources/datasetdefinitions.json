@@ -95,6 +95,12 @@
       "desc": "Dataset containing soft redirects between categories in Wikipedia.",
       "defaultgraph": "dataset"
     },
+    "maintenance_categories": {
+      "name": "Maintenance Categories",
+      "traits":"LinkedData, Published",
+      "desc": "Dataset containing maintenance categories in Wikipedia.",
+      "defaultgraph": "dataset"
+    },
     "article_categories": {
       "name": "Article Categories",
       "traits":"LinkedData, Published",

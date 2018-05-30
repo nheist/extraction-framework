@@ -147,6 +147,7 @@ object DBpediaDatasets
     val Redirects: Dataset = datasets("redirects")
     val RedirectsTransitive: Dataset = datasets("transitive_redirects")
     val CategoryRedirects: Dataset = datasets("category_redirects")
+    val MaintenanceCategories: Dataset = datasets("maintenance_categories")
     val ArticleCategories: Dataset = datasets("article_categories")
     val ArticleTemplates: Dataset = datasets("article_templates")
     val ArticleTemplatesNested: Dataset = datasets("article_templates_nested")
