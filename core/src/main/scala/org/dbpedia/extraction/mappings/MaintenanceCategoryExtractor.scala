@@ -25,8 +25,8 @@ extends PageNodeExtractor
 
     private val rdfTypeProperty = context.ontology.properties("rdf:type")
 
-    private val parameterlessMaintenanceCategoryTemplates = Set("hidden category", "hiddencat", "tracking category", "trackingcat")
-    private val maintenanceCategoryTemplates = Set("maintenance category", "maincat")
+    private val parameterlessMaintenanceCategoryTemplates = Set("hidden category", "hiddencat", "tracking category", "trackingcat", "monthly clean-up category")
+    private val maintenanceCategoryTemplates = Set("wikipedia category", "wikicat")
 
     override val datasets = Set(DBpediaDatasets.MaintenanceCategories)
 
@@ -55,10 +55,12 @@ extends PageNodeExtractor
             logger.info("Found maintenance node with parameterless template!")
             true
         case maintenanceTemplateNode : TemplateNode if  maintenanceCategoryTemplates.contains(maintenanceTemplateNode.title.decoded.toLowerCase()) =>
-            logger.info("Found maintenance template node with keyset: " + maintenanceTemplateNode.keySet)
+            logger.info("Found maintenance template node with keyset: " + maintenanceTemplateNode.keySet.mkString(","))
             logger.info("Wikitext of node: " + maintenanceTemplateNode.toWikiText)
             logger.info("Tracking prop: " + maintenanceTemplateNode.property("tracking"))
-            true
+            val isMaintenanceCat = maintenanceTemplateNode.property("tracking").isDefined || maintenanceTemplateNode.property("hidden").isDefined
+            logger.info("Returning: " + isMaintenanceCat)
+            isMaintenanceCat
         case _ => node.children.map(hasMaintenanceTemplate).reduceOption(_ || _).getOrElse(false)
     }
 
